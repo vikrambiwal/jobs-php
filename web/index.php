@@ -201,7 +201,7 @@ if ( $result->type == 'JOBS' ){
                 if(strlen($job->description) > 30){
                   echo substr($job->description,30)."...";
                 } else{
-                  echo $job->description ;
+                  // echo $job->description ;
                 }
                  ?></p>
               </div>
