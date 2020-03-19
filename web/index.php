@@ -4,7 +4,9 @@ require_once "Services_Careerjet.php" ;
 
 $api = new Services_Careerjet('en_GB') ;
 
-$result = $api->search(array( 'keywords' => 'php developer')) ;
+$result = $api->search(array( 'keywords' => 'php developer',
+                              'location' => 'India')
+                       ) ;
 
 if ( $result->type == 'JOBS' ){
   echo "Found ".$result->hits." jobs" ;
