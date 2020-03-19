@@ -198,8 +198,8 @@ if ( $result->type == 'JOBS' ){
                 <h2>Back-end Engineer (Python) <?php echo $job->title ; ?></h2>
                 <strong><?php echo $job->company ; ?></strong>
                 <p><?php 
-                if(strlen($job->description)>70){
-                  echo substr($job->description,70)."...";
+                if(strlen($job->description) > 30){
+                  echo substr($job->description,30)."...";
                 } else{
                   echo $job->description ;
                 }
