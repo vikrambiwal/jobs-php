@@ -102,10 +102,10 @@
               <h1 class="text-white font-weight-bold">The Easiest Way To Get Your Dream Job</h1>
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate est, consequuntur perferendis.</p>
             </div>
-            <form method="get" action="/" class="search-jobs-form">
+            <form method="post" class="search-jobs-form">
               <div class="row mb-5">
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <input type="text" name="keyword" class="form-control form-control-lg" placeholder="Job title, Company...">
+                  <input type="text" class="form-control form-control-lg" placeholder="Job title, Company...">
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
                   <select class="selectpicker" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Region">
@@ -151,65 +151,27 @@
         
         <ul class="job-listings mb-5">
         
-
-<?php
-
-require_once "Careerjet_API.php" ;
-$keyword = $_REQUEST['keyword'];
-
-if($keyword != ""){
-
-
-
-$api = new Careerjet_API('en_GB') ;
-$page = 1 ; # Or from parameters.
-
-$result = $api->search(array(
-  'keywords' => $keyword,
-  'location' => 'India',
-  'page' => $page ,
-  'affid' => '678bdee048',
-));
-
-if ( $result->type == 'JOBS' ){
-  // echo "Found ".$result->hits." jobs" ;
-  // echo " on ".$result->pages." pages\n" ;
-  $jobs = $result->jobs ;
-  
-  foreach( $jobs as $job ){
-    // echo " URL:     ".$job->url."\n" ;
-    // echo " TITLE:   ".$job->title."\n" ;
-    // echo " LOC:     ".$job->locations."\n";
-    // echo " COMPANY: ".$job->company."\n" ;
-    // echo " SALARY:  ".$job->salary."\n" ;
-    // echo " DATE:    ".$job->date."\n" ;
-    // echo " DESC:    ".$job->description."\n" ;
-    // echo "\n" ;
-  
-
-?>
           <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
             <a href="job-single.html"></a>
             <div class="job-listing-logo">
               <img src="images/job_logo_3.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
             </div>
+
             <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
               <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2>Back-end Engineer (Python) <?php echo $job->title ; ?></h2>
-                <strong><?php echo $job->company ; ?></strong>
-                <p><?php echo $job->description ; ?></p>
+                <h2>Back-end Engineer (Python)</h2>
+                <strong>Amazon</strong>
+                <p>Back-end Engineer Back-end Engineer Back-end Engineer  </p>
               </div>
               <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span><?php echo $job->locations ; ?> 
+                <span class="icon-room"></span> Overland Park, Kansas 
               </div>
               <div class="job-listing-meta">
-                <span class="badge badge-success">Apply</span>
+                <span class="badge badge-success">Full Time</span>
               </div>
             </div>
           </li>
-<?php }
-    }
-  } ?>
+          
         </ul>
 
         <div class="row pagination-wrap">
@@ -313,55 +275,3 @@ if ( $result->type == 'JOBS' ){
      
   </body>
 </html>
-
-<?php
-
-require_once "Careerjet_API.php" ;
-
-$api = new Careerjet_API('en_GB') ;
-$page = 1 ; # Or from parameters.
-
-$result = $api->search(array(
-  'keywords' => 'php developer',
-  'location' => 'London',
-  'page' => $page ,
-  'affid' => '678bdee048',
-));
-
-if ( $result->type == 'JOBS' ){
-  echo "Found ".$result->hits." jobs" ;
-  echo " on ".$result->pages." pages\n" ;
-  $jobs = $result->jobs ;
-  
-  foreach( $jobs as $job ){
-    echo " URL:     ".$job->url."\n" ;
-    echo " TITLE:   ".$job->title."\n" ;
-    echo " LOC:     ".$job->locations."\n";
-    echo " COMPANY: ".$job->company."\n" ;
-    echo " SALARY:  ".$job->salary."\n" ;
-    echo " DATE:    ".$job->date."\n" ;
-    echo " DESC:    ".$job->description."\n" ;
-    echo "\n" ;
-  }
-
-  # Basic paging code
-  if( $page > 1 ){
-    echo "Use \$page - 1 to link to previous page\n";
-  }
-  echo "You are on page $page\n" ;
-  if ( $page < $result->pages ){
-    echo "Use \$page + 1 to link to next page\n" ;
-  }
-}
-
-# When location is ambiguous
-if ( $result->type == 'LOCATIONS' ){
-  $locations = $result->solveLocations ;
-  foreach ( $locations as $loc ){
-    echo $loc->name."\n" ; # For end user display
-    ## Use $loc->location_id when making next search call
-    ## as 'location_id' parameter
-  }
-}
-
-?>
