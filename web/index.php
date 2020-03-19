@@ -4,7 +4,7 @@ require_once "Services_Careerjet.php" ;
 
 $api = new Services_Careerjet('en_IN') ;
 
-$result = $api->search(array( 'keywords' => 'php developer',
+$result = $api->search(array( 'keywords' => 'java',
                               'location' => 'India')
                        ) ;
 
