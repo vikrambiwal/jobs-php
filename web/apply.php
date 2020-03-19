@@ -131,7 +131,7 @@ $job = $all_jobs[$ind];
             <div class="row mb-5">
              
               <div class="col-6">
-                <a href="#" class="btn btn-block btn-primary btn-md">Apply Now</a>
+                <a href="<?php echo $job->url ; ?>" class="btn btn-block btn-primary btn-md">Apply Now</a>
               </div>
             </div>
 
