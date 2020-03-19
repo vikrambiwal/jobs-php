@@ -1,25 +1,35 @@
 <?php
 
-require('../vendor/autoload.php');
+require_once "Services_Careerjet.php" ;
 
-$app = new Silex\Application();
-$app['debug'] = true;
+$api = new Services_Careerjet('en_GB') ;
 
-// Register the monolog logging service
-$app->register(new Silex\Provider\MonologServiceProvider(), array(
-  'monolog.logfile' => 'php://stderr',
-));
+$result = $api->search(array( 'keywords' => 'php developer',
+                              'location' => 'London')
+                       ) ;
 
-// Register view rendering
-$app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__.'/views',
-));
+if ( $result->type == 'JOBS' ){
+  echo "Found ".$result->hits." jobs" ;
+  echo " on ".$result->pages." pages\n" ;
+  $jobs = $result->jobs ;
+  
+  foreach( $jobs as &$job ){
+    echo " URL:     ".$job->url."\n" ;
+    echo " TITLE:   ".$job->title."\n" ;
+    echo " LOC:     ".$job->locations."\n";
+    echo " COMPANY: ".$job->company."\n" ;
+    echo " SALARY:  ".$job->salary."\n" ;
+    echo " DATE:    ".$job->date."\n" ;
+    echo " DESC:    ".$job->description."\n" ;
+    echo "\n" ;
+  }
+}
 
-// Our web handlers
+if ( $result->type == 'LOCATIONS' ){
+  $locations = $result->locations ;
+  foreach ( $locations as &$loc ){
+    echo $loc."\n" ;
+  }
+}
 
-$app->get('/', function() use($app) {
-  $app['monolog']->addDebug('logging output.');
-  return $app['twig']->render('index.twig');
-});
-
-$app->run();
+?>
