@@ -1,29 +1,53 @@
 <?php
 
-$curl = curl_init();
+require_once "Careerjet_API.php" ;
 
-curl_setopt_array($curl, array(
-	CURLOPT_URL => "https://indeed-indeed.p.rapidapi.com/apigetjobs?jobkeys=java&v=2&format=json&publisher=any",
-	CURLOPT_RETURNTRANSFER => true,
-	CURLOPT_FOLLOWLOCATION => true,
-	CURLOPT_ENCODING => "",
-	CURLOPT_MAXREDIRS => 10,
-	CURLOPT_TIMEOUT => 30,
-	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-	CURLOPT_CUSTOMREQUEST => "GET",
-	CURLOPT_HTTPHEADER => array(
-		"x-rapidapi-host: indeed-indeed.p.rapidapi.com",
-		"x-rapidapi-key: 279d8d3289msh60b7c4ff9937c08p16f77fjsnedac47b9d0a4"
-	),
+$api = new Careerjet_API('en_GB') ;
+$page = 1 ; # Or from parameters.
+
+$result = $api->search(array(
+  'keywords' => 'php developer',
+  'location' => 'London',
+  'page' => $page ,
+  'affid' => '678bdee048',
 ));
 
-$response = curl_exec($curl);
-$err = curl_error($curl);
+if ( $result->type == 'JOBS' ){
+  echo "Found ".$result->hits." jobs" ;
+  echo " on ".$result->pages." pages\n" ;
+  $jobs = $result->jobs ;
+  
+  foreach( $jobs as $job ){
+    echo " URL:     ".$job->url."\n" ;
+    echo " TITLE:   ".$job->title."\n" ;
+    echo " LOC:     ".$job->locations."\n";
+    echo " COMPANY: ".$job->company."\n" ;
+    echo " SALARY:  ".$job->salary."\n" ;
+    echo " DATE:    ".$job->date."\n" ;
+    echo " DESC:    ".$job->description."\n" ;
+    echo "\n" ;
+  }
 
-curl_close($curl);
-
-if ($err) {
-	echo "cURL Error #:" . $err;
-} else {
-	echo $response;
+  # Basic paging code
+  if( $page > 1 ){
+    echo "Use \$page - 1 to link to previous page\n";
+  }
+  echo "You are on page $page\n" ;
+  if ( $page < $result->pages ){
+    echo "Use \$page + 1 to link to next page\n" ;
+  }
 }
+
+# When location is ambiguous
+if ( $result->type == 'LOCATIONS' ){
+  $locations = $result->solveLocations ;
+  foreach ( $locations as $loc ){
+    echo $loc->name."\n" ; # For end user display
+    ## Use $loc->location_id when making next search call
+    ## as 'location_id' parameter
+  }
+}
+
+
+
+?>
