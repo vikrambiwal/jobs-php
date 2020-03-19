@@ -197,7 +197,13 @@ if ( $result->type == 'JOBS' ){
               <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
                 <h2>Back-end Engineer (Python) <?php echo $job->title ; ?></h2>
                 <strong><?php echo $job->company ; ?></strong>
-                <p><?php echo $job->description ; ?></p>
+                <p><?php 
+                if(strlen($job->description)>90){
+                  echo substr($job->description,90)."...";
+                } else{
+                  echo $job->description ;
+                }
+                 ?></p>
               </div>
               <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
                 <span class="icon-room"></span><?php echo $job->locations ; ?> 
