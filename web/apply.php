@@ -1,17 +1,19 @@
 <?php
 session_start();
 
+$all_jobs = $_SESSION['all_jobs'];
+$ind = $_REQUEST['ind'];
+$job = $all_jobs[$ind];
+
 ?>
+
 <!doctype html>
 <html lang="en">
   <head>
     <title>JobBoard &mdash; Website Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-    <meta name="author" content="Free-Template.co" />
-    <link rel="shortcut icon" href="ftco-32x32.png">
+    
     
     <link rel="stylesheet" href="css/custom-bs.css">
     <link rel="stylesheet" href="css/jquery.fancybox.min.css">
@@ -54,12 +56,12 @@ session_start();
 
           <nav class="mx-auto site-navigation">
             <ul class="site-menu js-clone-nav d-none d-xl-block ml-0 pl-0">
-              <li><a href="index.html" class="nav-link active">Home</a></li>
+              <li><a href="index.html" class="nav-link ">Home</a></li>
               <li><a href="about.html">About</a></li>
               <li class="has-children">
-                <a href="job-listings.html">Job Listings</a>
+                <a href="job-listings.html" class="active">Job Listings</a>
                 <ul class="dropdown">
-                  <li><a href="job-single.html">Job Single</a></li>
+                  <li><a href="job-single.html" class="active">Job Single</a></li>
                   <li><a href="post-job.html">Post a Job</a></li>
                 </ul>
               </li>
@@ -96,155 +98,61 @@ session_start();
     </header>
 
     <!-- HOME -->
-    <section class="home-section section-hero overlay bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
-
+    <section class="section-hero overlay inner-page bg-image" style="background-image: url('images/hero_1.jpg');" id="home-section">
       <div class="container">
-        <div class="row align-items-center justify-content-center">
-          <div class="col-md-12">
-            <div class="mb-5 text-center">
-              <h1 class="text-white font-weight-bold">The Easiest Way To Get Your Dream Job</h1>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate est, consequuntur perferendis.</p>
+        <div class="row">
+          <div class="col-md-7">
+            <h1 class="text-white font-weight-bold">Product Designer</h1>
+            <div class="custom-breadcrumbs">
+              <a href="#">Home</a> <span class="mx-2 slash">/</span>
+              <a href="#">Job</a> <span class="mx-2 slash">/</span>
+              <span class="text-white"><strong><?php echo $job->title ; ?></strong></span>
             </div>
-            <form method="get" action="/" class="search-jobs-form">
-              <div class="row mb-5">
-                <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <input type="text" name="keyword" class="form-control form-control-lg" placeholder="Job title, Company...">
-                </div>
-                <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <select class="selectpicker" data-style="btn-white btn-lg" data-width="100%" data-live-search="true" title="Select Region">
-                    <option>Anywhere</option>
-                    <option>San Francisco</option>
-                    <option>Palo Alto</option>
-                    <option>New York</option>
-                    <option>Manhattan</option>
-                    <option>Ontario</option>
-                    <option>Toronto</option>
-                    <option>Kansas</option>
-                    <option>Mountain View</option>
-                  </select>
-                </div>
-                <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0">
-                  <button type="submit" class="btn btn-primary btn-lg btn-block text-white btn-search"><span class="icon-search icon mr-2"></span>Search Job</button>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-12 popular-keywords">
-                  <h3>Trending Keywords:</h3>
-                  <ul class="keywords list-unstyled m-0 p-0">
-                    <li><a href="#" class="">UI Designer</a></li>
-                    <li><a href="#" class="">Python</a></li>
-                    <li><a href="#" class="">Developer</a></li>
-                  </ul>
-                </div>
-              </div>
-            </form>
           </div>
         </div>
       </div>
-
-      <a href="#next" class="scroll-button smoothscroll">
-        <span class=" icon-keyboard_arrow_down"></span>
-      </a>
-
     </section>
-  
 
+    
     <section class="site-section">
       <div class="container">
-        
-        <ul class="job-listings mb-5">
-        
+      
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="mb-5">
 
-<?php
+              <h3 class="h5 d-flex align-items-center mb-4 text-primary"><span class="icon-align-left mr-3"></span>Job Description</h3>
+              <p><?php echo $job->description ; ?></p>
 
-require_once "Careerjet_API.php" ;
-$keyword = $_REQUEST['keyword'];
-
-if($keyword != ""){
-
-
-
-$api = new Careerjet_API('en_GB') ;
-$page = 1 ; # Or from parameters.
-
-$result = $api->search(array(
-  'keywords' => $keyword,
-  'location' => 'India',
-  'page' => $page ,
-  'affid' => '678bdee048',
-));
-
-if ( $result->type == 'JOBS' ){
-  // echo "Found ".$result->hits." jobs" ;
-  // echo " on ".$result->pages." pages\n" ;
-  $jobs = $result->jobs ;
-  $_SESSION['all_jobs'] = $jobs;
-
-  $i = 0;
-  foreach( $jobs as $job ){
-    $i++;
-    // echo " URL:     ".$job->url."\n" ;
-    // echo " TITLE:   ".$job->title."\n" ;
-    // echo " LOC:     ".$job->locations."\n";
-    // echo " COMPANY: ".$job->company."\n" ;
-    // echo " SALARY:  ".$job->salary."\n" ;
-    // echo " DATE:    ".$job->date."\n" ;
-    // echo " DESC:    ".$job->description."\n" ;
-    // echo "\n" ;
-  
-
-?>
-          <li class="job-listing d-block d-sm-flex pb-3 pb-sm-0 align-items-center">
-            <a href="apply.php?ind=<?php echo $i ; ?>"></a>
-            <div class="job-listing-logo">
-              <img src="images/job_logo_3.jpg" alt="Free Website Template by Free-Template.co" class="img-fluid">
             </div>
-            <div class="job-listing-about d-sm-flex custom-width w-100 justify-content-between mx-4">
-              <div class="job-listing-position custom-width w-50 mb-3 mb-sm-0">
-                <h2><?php echo $job->title ; ?></h2>
-                <strong><?php echo $job->company ; ?></strong>
-                <p><?php 
-                if(strlen($job->description) > 70){
-                  echo substr($job->description, 70)."...";
-                } else{
-                  echo $job->description ;
-                }
-                 ?></p>
-              </div>
-              <div class="job-listing-location mb-3 mb-sm-0 custom-width w-25">
-                <span class="icon-room"></span><?php echo $job->locations ; ?> 
-              </div>
-              <div class="job-listing-meta">
-                <span class="badge badge-success">Apply</span>
+
+           
+
+            <div class="row mb-5">
+             
+              <div class="col-6">
+                <a href="#" class="btn btn-block btn-primary btn-md">Apply Now</a>
               </div>
             </div>
-          </li>
-<?php }
-    }
-  } ?>
-        </ul>
 
-        <div class="row pagination-wrap">
-          <div class="col-md-6 text-center text-md-left mb-4 mb-md-0">
-            <span>Showing 1-7 Of 43,167 Jobs</span>
           </div>
-          <div class="col-md-6 text-center text-md-right">
-            <div class="custom-pagination ml-auto">
-              <a href="#" class="prev">Prev</a>
-              <div class="d-inline-block">
-              <a href="#" class="active">1</a>
-              <a href="#">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              </div>
-              <a href="#" class="next">Next</a>
+          <div class="col-lg-4">
+            <div class="bg-light p-3 border rounded mb-4">
+              <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Job Summary</h3>
+              <ul class="list-unstyled pl-3 mb-0">
+                <li class="mb-2"><strong class="text-black">Published on:</strong> <?php echo $job->date ; ?></li>
+                <li class="mb-2"><strong class="text-black">Company:</strong> <?php echo $job->company ; ?></li>
+                <li class="mb-2"><strong class="text-black">Job Location:</strong> <?php echo $job->locations ; ?></li>
+                <li class="mb-2"><strong class="text-black">Salary:</strong> <?php echo $job->salary ; ?></li>
+              </ul>
             </div>
+
+
           </div>
         </div>
-
       </div>
     </section>
-    
+
     
     <footer class="site-footer">
 
@@ -325,55 +233,3 @@ if ( $result->type == 'JOBS' ){
      
   </body>
 </html>
-
-<?php
-
-require_once "Careerjet_API.php" ;
-
-$api = new Careerjet_API('en_GB') ;
-$page = 1 ; # Or from parameters.
-
-$result = $api->search(array(
-  'keywords' => 'php developer',
-  'location' => 'London',
-  'page' => $page ,
-  'affid' => '678bdee048',
-));
-
-if ( $result->type == 'JOBS' ){
-  echo "Found ".$result->hits." jobs" ;
-  echo " on ".$result->pages." pages\n" ;
-  $jobs = $result->jobs ;
-  
-  foreach( $jobs as $job ){
-    echo " URL:     ".$job->url."\n" ;
-    echo " TITLE:   ".$job->title."\n" ;
-    echo " LOC:     ".$job->locations."\n";
-    echo " COMPANY: ".$job->company."\n" ;
-    echo " SALARY:  ".$job->salary."\n" ;
-    echo " DATE:    ".$job->date."\n" ;
-    echo " DESC:    ".$job->description."\n" ;
-    echo "\n" ;
-  }
-
-  # Basic paging code
-  if( $page > 1 ){
-    echo "Use \$page - 1 to link to previous page\n";
-  }
-  echo "You are on page $page\n" ;
-  if ( $page < $result->pages ){
-    echo "Use \$page + 1 to link to next page\n" ;
-  }
-}
-
-# When location is ambiguous
-if ( $result->type == 'LOCATIONS' ){
-  $locations = $result->solveLocations ;
-  foreach ( $locations as $loc ){
-    echo $loc->name."\n" ; # For end user display
-    ## Use $loc->location_id when making next search call
-    ## as 'location_id' parameter
-  }
-}
-
-?>
